@@ -9,6 +9,9 @@ class Team(models.Model):
     name = models.CharField(max_length=100)
     project_code = models.CharField(max_length=10)
 
+    # The string representation of this object, should be its name
+    def __str__(self):
+        return self.name
 
 
 # Stream
@@ -19,6 +22,10 @@ class Team(models.Model):
 class Stream(models.Model):
     name = models.CharField(max_length=100)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
+
+    # The string representation of this object, should be its name
+    def __str__(self):
+        return self.name
 
 
 
@@ -36,6 +43,11 @@ class Person(models.Model):
     role = models.CharField(max_length=100)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
+
+    # The string representation of this object, should be its name
+    def __str__(self):
+        return self.name
+
 
 
 
@@ -56,6 +68,10 @@ class Conference(models.Model):
     source = models.CharField(max_length=100)
     description = models.CharField(max_length=400)
 
+    # The string representation of this object, should be its filename
+    def __str__(self):
+        return self.file_name
+
 
 
 # Question
@@ -66,7 +82,6 @@ class Conference(models.Model):
 class Question(models.Model):
     text = models.CharField(max_length=1000)
     date = models.DateTimeField('Date asked')
-
 
 
 # Feedback
