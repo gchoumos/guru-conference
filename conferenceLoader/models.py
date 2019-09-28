@@ -68,9 +68,25 @@ class Conference(models.Model):
     source = models.CharField(max_length=100)
     description = models.CharField(max_length=400)
 
-    # The string representation of this object, should be its filename
+    # Change the string representation of this object to the date and score.
     def __str__(self):
-        return self.file_name
+        return self.train_date.strftime("%d/%m/%y") + " - Score: " + str(self.score)
+
+
+
+# Default Team Conference
+# -----------------------
+# Represents the default trained model selected for a Team that will be generating predictions.
+# * team  - The team for which this particular model is the default.
+# * model - The model that is the the default for the team.
+class DefaultTeamConference(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    model = models.ForeignKey(Conference, on_delete=models.CASCADE)
+
+    # Change the string representation of this object to the date and score.
+    def __str__(self):
+        return str(self.team) + " -- " + str(self.model)
+
 
 
 
