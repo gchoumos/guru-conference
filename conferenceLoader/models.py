@@ -89,7 +89,6 @@ class DefaultTeamConference(models.Model):
 
 
 
-
 # Question
 # -------
 # Represents the question that is being asked from someone in order to detect gurus about it.
@@ -98,6 +97,7 @@ class DefaultTeamConference(models.Model):
 class Question(models.Model):
     text = models.CharField(max_length=1000)
     date = models.DateTimeField('Date asked')
+
 
 
 # Feedback
