@@ -1,0 +1,9 @@
+Guru Detector for {{ team_name }}!
+<br/>
+
+<b>Here are the people of the team:</b>
+    <ul>
+    {% for p in team_people %}
+        <li>{{ p.name }} - {{ p.role }}</li>
+    {% endfor %}
+    </ul>
