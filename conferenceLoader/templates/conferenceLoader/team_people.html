@@ -1,5 +1,14 @@
 Guru Detector for {{ team_name }}!
 <br/>
+<br/>
+
+What would you like to know about?
+<form action="results/" method="post">
+    {%csrf_token%}
+    <!-- <label> </label> -->
+    <input id="question" type="text" name="question" value="">
+    <input type="submit" value="Detect Gurus">
+</form>
 
 <b>Here are the people of the team:</b>
     <ul>

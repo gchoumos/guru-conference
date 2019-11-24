@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
+from django import forms
 from .models import Team, Person
 from .trained_models.load_models import load_model
 
@@ -13,12 +14,24 @@ import numpy as np
 # Load the William Hill latest trained model (the argument should be passed through the relevant config. Not harcoded.)
 model = load_model('WIL')
 
+# Maybe need to move this and any other form items to a different module?
+class Question(forms.Form):
+    question = forms.CharField(label='What do you want to know about?', max_length=200)
+
 # This is if the detectGuru part of the url is removed. Consider redirecting to a meaningful page.
 def index(request):
     return HttpResponse("Hello, world. You're at the conference index.")
 
 
 def detect_team_guru(request, project):
+    team = get_object_or_404(Team, project_code=project)
+    context = {
+        'team_name': team.name,
+        'team_people': Person.objects.all().filter(team=team.pk),
+    }
+    return render(request, 'conferenceLoader/team_people.html', context)
+
+def team_people(request, project):
     team = get_object_or_404(Team, project_code=project)
     context = {
         'team_name': team.name,
@@ -36,7 +49,7 @@ def detect_guru_no_spec(request):
 # The results page
 def results(request, project):
     resp = "{0} - This is the Guru Results page.<br/>And the model classes:<br/>{1}</br>".format(project,model.classes_)
-    resp2 = detect_guru('telebet migration offshore onshore')
+    resp2 = detect_guru(request.POST.get("question"))
     return HttpResponse(resp + resp2)
 
 
@@ -44,7 +57,6 @@ def results(request, project):
 
 ### Probably need to be moved elsewhere, to a util module
 def detect_guru(text, n=10):
-    resp = ""
     test = np.dstack([
         text
     ])
@@ -72,7 +84,7 @@ def detect_guru(text, n=10):
             ordered[i][2] = "*"
         else:
             ordered[i][2] = "Not likely"
-    resp += "num. &emsp; Name &emsp; Guru Meter <br>"
+    response = "num. &emsp; Name &emsp; Guru Meter <br>"
     for i in range(n):
-        resp += "{0}. &emsp; {1} &emsp; {2} <br>".format(i+1, ordered[i][0], ordered[i][2])
-    return resp
+        response += "{0}. &emsp; {1} &emsp; {2} <br>".format(i+1, ordered[i][0], ordered[i][2])
+    return response
