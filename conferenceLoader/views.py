@@ -29,7 +29,7 @@ def detect_team_guru(request, project):
         'team_name': team.name,
         'team_people': Person.objects.all().filter(team=team.pk),
     }
-    return render(request, 'conferenceLoader/team_people.html', context)
+    return render(request, 'conferenceLoader/question.html', context)
 
 def team_people(request, project):
     team = get_object_or_404(Team, project_code=project)

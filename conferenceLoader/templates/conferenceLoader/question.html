@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/style.css' %}">
+
+<div id="detect-page">
+    <div class="top">
+        <div class="guru-header">
+            Guru Detector - {{ team_name }}
+        </div>
+        <div class="guru-question">
+            What would you like to know about?
+            <form action="results/" method="post">
+                {%csrf_token%}
+                <input id="question" type="text" name="question" value="">
+                <input type="submit" value="Detect Gurus">
+            </form>
+        </div>
+    </div>
+
+    <div class="bottom">
+
+    </div>
+</div>
