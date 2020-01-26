@@ -87,7 +87,10 @@ def detect_guru(text, n=-1):
             ordered[i][2] = "*"
         else:
             ordered[i][2] = "Low probability compared to the rest"
-        results.append([ordered[i][0],ordered[i][1],ordered[i][2]])
+        if (n<1 and int(ordered[i][1]*100) >= 1) or i < n:
+            results.append([ordered[i][0],ordered[i][1],ordered[i][2]])
+        else:
+            break
         # results[ordered[i][0]] =  {
         #     'score': ordered[i][1],
         #     'assessment': ordered[i][2],
