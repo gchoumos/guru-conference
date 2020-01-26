@@ -27,6 +27,7 @@ def detect_team_guru(request, project):
     team = get_object_or_404(Team, project_code=project)
     context = {
         'team_name': team.name,
+        'team_tag': team.project_code.lower(),
         'team_people': Person.objects.all().filter(team=team.pk),
     }
     return render(request, 'conferenceLoader/question.html', context)
