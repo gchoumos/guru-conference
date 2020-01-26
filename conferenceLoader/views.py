@@ -49,15 +49,17 @@ def detect_guru_no_spec(request):
 
 # The results page
 def results(request, project):
-    resp = "{0} - This is the Guru Results page.<br/>And the model classes:<br/>{1}</br>".format(project,model.classes_)
-    resp2 = detect_guru(request.POST.get("question"))
-    return HttpResponse(resp + resp2)
+    # resp = "{0} - This is the Guru Results page.<br/>And the model classes:<br/>{1}</br>".format(project,model.classes_)
+    context = {
+        'results': detect_guru(request.POST.get("question")),
+    }
+    return render(request, 'conferenceLoader/results.html', context)
 
 
 
 
 ### Probably need to be moved elsewhere, to a util module
-def detect_guru(text, n=10):
+def detect_guru(text, n=-1):
     test = np.dstack([
         text
     ])
@@ -67,25 +69,27 @@ def detect_guru(text, n=10):
     test_probs = y
     ordered = [[test_labels[i],test_probs[0][i],test_probs[0][i]] for i in range(test_labels.shape[0])]
     ordered.sort(key=lambda x: x[1],reverse=True)
-    print("Top {0} results:".format(n))
-    for i in range(n):
-        if ordered[i][1]*100 > 40:
+    results = []
+    for i in range(len(ordered)):
+        if ordered[i][1]*100 >= 50:
             ordered[i][2] = "Absolute Guru"
-        elif ordered[i][1]*100 > 30:
+        elif ordered[i][1]*100 >= 25:
             ordered[i][2] = "Guru"
-        elif ordered[i][1]*100 > 20:
+        elif ordered[i][1]*100 >= 20:
             ordered[i][2] = "*****"
-        elif ordered[i][1]*100 > 10:
+        elif ordered[i][1]*100 >= 15:
             ordered[i][2] = "****"
-        elif ordered[i][1]*100 > 5:
+        elif ordered[i][1]*100 >= 10:
             ordered[i][2] = "***"
-        elif ordered[i][1]*100 > 2:
+        elif ordered[i][1]*100 >= 4:
             ordered[i][2] = "**"
-        elif ordered[i][1]*100 > 1:
+        elif ordered[i][1]*100 >= 2:
             ordered[i][2] = "*"
         else:
-            ordered[i][2] = "Not likely"
-    response = "num. &emsp; Name &emsp; Guru Meter <br>"
-    for i in range(n):
-        response += "{0}. &emsp; {1} &emsp; {2} <br>".format(i+1, ordered[i][0], ordered[i][2])
-    return response
+            ordered[i][2] = "Low probability compared to the rest"
+        results.append([ordered[i][0],ordered[i][1],ordered[i][2]])
+        # results[ordered[i][0]] =  {
+        #     'score': ordered[i][1],
+        #     'assessment': ordered[i][2],
+        # }
+    return results
