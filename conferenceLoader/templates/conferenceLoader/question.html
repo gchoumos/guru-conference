@@ -1,21 +1,40 @@
 {% load static %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/question.css' %}">
 
 <div id="detect-page">
-    <div id="guru-header">
-        Guru Detector - {{ team_name }}
-    </div>
-    <div id="guru-question">
-        What would you like to know about?
-        <form action="results/" method="post">
-            {%csrf_token%}
-            <input id="question" type="text" name="question" value="">
-            <input type="submit" value="Detect Gurus">
-        </form>
-    </div>
-    <div id="logos">
-        <div id="{{team_tag}}"></div>
-        <div id="sgd"></div>
+    <div id="guru-question" class="container">
+        <div class="row">
+            <div class="col logo-text text-right align-self-center">
+                <h1 class="display-4">Guru</h1>
+            </div>
+            <div class="col">
+                <!-- Guru Detector - {{ team_name }} -->
+                <img src="../../../static/conferenceLoader/images/guru_logo/logo_only_transparent.png" class="img-fluid" alt="GuruDetector for {{team_name}}">
+            </div>
+            <div class="col logo-text text-left align-self-center">
+                <h1 class="display-4">Detector</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div id="question-prompt" class="col">
+                <h3>What would you like to know about?</h3>
+            </div>
+        </div>
+        <div class="form-inline row justify-content-center">
+            <form action="results/" method="post">
+                {%csrf_token%}
+                <input id="question" class="form-control" type="text" size=50 name="question" value="">
+                <button class="btn btn-danger" type="submit">Detect Gurus</button>
+            </form>
+        </div>
+        <div id="logos" class="row justify-content-center">
+            <div class="col-4 align-self-center">
+               <img src="../../../static/conferenceLoader/images/williamhill/william-hill-white-transparent.png" class="img-fluid">
+            </div>
+            <div class="col-4 align-self-center">
+                <img src="../../../static/conferenceLoader/images/sg_digital/sgd_logo_sm.png" class="img-fluid"></img>
+            </div>
+        </div>
     </div>
 </div>
