@@ -1,4 +1,6 @@
 from django.db import models
+from django.forms import ModelForm, HiddenInput
+from django.utils.timezone import now
 
 # Team
 # ----
@@ -92,11 +94,18 @@ class DefaultTeamConference(models.Model):
 # Question
 # -------
 # Represents the question that is being asked from someone in order to detect gurus about it.
-# * text - The question itself as was input by the user
-# * date - Date that the question was asked
+# * question - The question itself as was input by the user
+# * datetime - Date and time that the question was asked
 class Question(models.Model):
-    text = models.CharField(max_length=1000)
-    date = models.DateTimeField('Date asked')
+    question = models.CharField(max_length=500, default='')
+    datetime = models.DateTimeField('Date asked', default=now)
+
+class QuestionForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ["question", "datetime"]
+        labels = {'question': ''}
+        widgets = {'datetime': HiddenInput(),}
 
 
 

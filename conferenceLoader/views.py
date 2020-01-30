@@ -2,21 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django import forms
-from .models import Team, Person
+from .models import Team, Person, QuestionForm
 from .trained_models.load_models import load_model
 
 import pickle
 import os
-
-# Consider moving elsewhere?
 import numpy as np
 
 # Load the William Hill latest trained model (the argument should be passed through the relevant config. Not harcoded.)
 model = load_model('WIL')
-
-# Maybe need to move this and any other form items to a different module?
-class Question(forms.Form):
-    question = forms.CharField(label='What do you want to know about?', max_length=200)
 
 # This is if the detectGuru part of the url is removed. Consider redirecting to a meaningful page.
 def index(request):
@@ -25,10 +19,11 @@ def index(request):
 
 def detect_team_guru(request, project):
     team = get_object_or_404(Team, project_code=project)
+    question_form = QuestionForm()
     context = {
         'team_name': team.name,
         'team_tag': team.project_code.lower(),
-        'team_people': Person.objects.all().filter(team=team.pk),
+        'question_form': question_form,
     }
     return render(request, 'conferenceLoader/question.html', context)
 
@@ -49,7 +44,9 @@ def detect_guru_no_spec(request):
 
 # The results page
 def results(request, project):
-    # resp = "{0} - This is the Guru Results page.<br/>And the model classes:<br/>{1}</br>".format(project,model.classes_)
+    question_form = QuestionForm(request.POST or None)
+    if question_form.is_valid():
+        question_form.save()
     context = {
         'results': detect_guru(request.POST.get("question")),
     }

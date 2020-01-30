@@ -24,7 +24,7 @@
         <div class="form-inline row justify-content-center">
             <form action="results/" method="post">
                 {%csrf_token%}
-                <input id="question" class="form-control" type="text" size=50 name="question" value="">
+                {{question_form}}
                 <button class="btn btn-danger" type="submit">Detect Gurus</button>
             </form>
         </div>
@@ -35,6 +35,9 @@
             <div class="col-4 align-self-center">
                 <img src="../../../static/conferenceLoader/images/sg_digital/sgd_logo_sm.png" class="img-fluid"></img>
             </div>
+        </div>
+        <div class="row justify-content-center">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Want to share Feedback?</button>
         </div>
     </div>
 </div>
