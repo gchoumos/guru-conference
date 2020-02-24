@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django import forms
-from .models import Team, Person, QuestionForm
+from .models import Team, Person, QuestionForm, FeedbackForm
 from .trained_models.load_models import load_model
 
 import pickle
@@ -20,10 +20,12 @@ def index(request):
 def detect_team_guru(request, project):
     team = get_object_or_404(Team, project_code=project)
     question_form = QuestionForm()
+    feedback_form = FeedbackForm()
     context = {
         'team_name': team.name,
         'team_tag': team.project_code.lower(),
         'question_form': question_form,
+        'feedback_form': feedback_form,
     }
     return render(request, 'conferenceLoader/question.html', context)
 

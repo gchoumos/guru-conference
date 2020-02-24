@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm, HiddenInput
+from django.forms import ModelForm, HiddenInput, RadioSelect, Textarea, CharField
 from django.utils.timezone import now
 
 # Team
@@ -103,7 +103,7 @@ class Question(models.Model):
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["question", "datetime"]
+        fields = ['question', 'datetime']
         labels = {'question': ''}
         widgets = {'datetime': HiddenInput(),}
 
@@ -113,19 +113,29 @@ class QuestionForm(ModelForm):
 # --------
 # Represents the feedback we wish to get from the users
 # * question     - The question that was asked (foreign key)
-# * feedback_gen - A general, high-level feedback in terms of useful/not-useful
 # * feedback_det - Detailed feedback in plain text by the user, if given.
 class Feedback(models.Model):
-    USEFUL = 'Y'
-    NOT_USEFUL = 'N'
-    NO_RESPONSE = '-'
-    FEEDBACK_CHOICES = [
-        (USEFUL, 'Useful'),
-        (NOT_USEFUL, 'Not useful'),
-        (NO_RESPONSE, 'Provide no feedback'),
-    ]
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    feedback_gen = models.CharField(max_length=1,choices=FEEDBACK_CHOICES,default=NO_RESPONSE)
+    datetime = models.DateTimeField('Date submitted', default=now)
+    name = models.CharField(max_length=20, default='')
+    # feedback_det = models.CharField(max_length=2000)
     feedback_det = models.CharField(max_length=2000)
 
+class FeedbackForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['feedback_det'].widget.attrs.update({'class': 'form-control'})
+
+    class Meta:
+        model = Feedback
+        fields = ['name','feedback_det','datetime']
+        labels = {
+            'name': 'Name (optional):',
+            'feedback_det': 'Feedback:',
+        }
+        widgets = {
+            'question': HiddenInput(),
+            'datetime': HiddenInput(),
+            'feedback_det':Textarea(attrs={'rows':5,}),}
 
