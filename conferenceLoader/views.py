@@ -54,8 +54,9 @@ def results(request, project):
     question_form = QuestionForm(request.POST or None)
     if question_form.is_valid():
         question_form.save()
+    results = detect_guru(request.POST.get("question"))
     context = {
-        'results': detect_guru(request.POST.get("question")),
+        'results': results,
     }
     return render(request, 'conferenceLoader/results.html', context)
 
