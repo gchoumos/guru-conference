@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 from django import forms
 from .models import Team, Person, QuestionForm, FeedbackForm
 from .trained_models.load_models import load_model
@@ -14,13 +15,17 @@ model = load_model('WIL')
 
 # This is if the detectGuru part of the url is removed. Consider redirecting to a meaningful page.
 def index(request):
-    return HttpResponse("Hello, world. You're at the conference index.")
+    return HttpResponse("Hello world. You're at the conference index.")
 
 
 def detect_team_guru(request, project):
     team = get_object_or_404(Team, project_code=project)
     question_form = QuestionForm()
-    feedback_form = FeedbackForm()
+    feedback_form = FeedbackForm(request.POST or None)
+    feedback_form.datetime = timezone.localtime()
+    if feedback_form.is_valid():
+        feedback_form.save()
+        return HttpResponseRedirect(request.path_info)
     context = {
         'team_name': team.name,
         'team_tag': team.project_code.lower(),

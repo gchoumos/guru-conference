@@ -115,11 +115,16 @@ class QuestionForm(ModelForm):
 # * question     - The question that was asked (foreign key)
 # * feedback_det - Detailed feedback in plain text by the user, if given.
 class Feedback(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    # question = models.ForeignKey(Question, on_delete=models.CASCADE)
     datetime = models.DateTimeField('Date submitted', default=now)
-    name = models.CharField(max_length=20, default='')
-    # feedback_det = models.CharField(max_length=2000)
+    name = models.CharField(max_length=20, blank=True, default='')
     feedback_det = models.CharField(max_length=2000)
+
+    def __str__(self):
+        if self.name == '':
+            return str("Anonymous - " + str(self.datetime))
+        else:
+            return str(self.name) + " - " + str(self.datetime)
 
 class FeedbackForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -135,7 +140,8 @@ class FeedbackForm(ModelForm):
             'feedback_det': 'Feedback:',
         }
         widgets = {
-            'question': HiddenInput(),
-            'datetime': HiddenInput(),
-            'feedback_det':Textarea(attrs={'rows':5,}),}
+            # 'question': HiddenInput(),
+            # 'datetime': HiddenInput(),
+            'feedback_det':Textarea(attrs={'rows':5,}),
+        }
 
