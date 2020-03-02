@@ -1,6 +1,7 @@
 {% load static %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/results.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div id="results-page" class="container">
     <div class="row">
@@ -17,8 +18,15 @@
     {% for result in results %}
         <div class="card">
             <div class="row">
-                <h5 class="col-md-4 card-header">{{ result.3 }}</h5>
-                <div class="col-md-8 card-header"></div>
+                <h5 class="col-md-4 card-header">{{ result.5 }}</h5>
+                <div class="col-md-2 card-header">
+                    <span class="badge badge-pill badge-{{result.4}}">{{result.3}}</span>
+                </div>
+                <div class="col-md-6 card-header">
+                    {% for c in result.2 %}
+                        <span class="fa fa-star text-warning"></span>
+                    {% endfor %}
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -27,7 +35,7 @@
                         alt="{{result.0}}">
                 </div>
                 <div class="col-md-8 card-body">
-                    <h5 class="card-title">{{ result.4 }}</h5>
+                    <h5 class="card-title">{{ result.6 }}</h5>
                     <p class="card-text">{{result.1}} - {{result.2}}</p>
                     <a href="#" class="btn btn-primary">Slack message</a>
                 </div>
