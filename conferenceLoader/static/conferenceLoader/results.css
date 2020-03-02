@@ -3,3 +3,11 @@ body {
     color: lightgray;
     text-align: center;
 }
+
+.logo-text {
+    font-family: monospace;
+}
+
+#results-page .card {
+    color: black;
+}

@@ -2,12 +2,36 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 <link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/results.css' %}">
 
-<div id=results-page>
-    <div class="container">
-        {% for result in results %}
-            <div class='row'>
-                {{ result.0 }}
-            </div>
-        {% endfor %}
+<div id="results-page" class="container">
+    <div class="row">
+        <div class="col logo-text text-right align-self-center">
+            <h1 class="display-4">Guru</h1>
+        </div>
+        <div class="col">
+            <img src="/static/conferenceLoader/images/guru_logo/logo_only_transparent.png" class="img-fluid" alt="GuruDetector for {{team_name}}">
+        </div>
+        <div class="col logo-text text-left align-self-center">
+            <h1 class="display-4">Results</h1>
+        </div>
     </div>
+    {% for result in results %}
+        <div class="card">
+            <div class="row">
+                <h5 class="col-md-4 card-header">{{ result.3 }}</h5>
+                <div class="col-md-8 card-header"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-thumbnail" src="/static/conferenceLoader/images/people/{{ result.0 }}_sm.jpg"
+                        onerror="if (this.src != 'error.jpg') this.src = '/static/conferenceLoader/images/people/gchoumo_sm.jpg';"
+                        alt="{{result.0}}">
+                </div>
+                <div class="col-md-8 card-body">
+                    <h5 class="card-title">{{ result.4 }}</h5>
+                    <p class="card-text">{{result.1}} - {{result.2}}</p>
+                    <a href="#" class="btn btn-primary">Slack message</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
 </div>

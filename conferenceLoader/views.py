@@ -55,8 +55,20 @@ def results(request, project):
     if question_form.is_valid():
         question_form.save()
     results = detect_guru(request.POST.get("question"))
+    results_context = []
+    for i in results:
+        person = Person.objects.get(username=i[0])
+        results_context.append(
+            i + [person.name,person.role]
+        )
+    # results[i][0]: username
+    # results[i][1]: guru percentage
+    # results[i][2]: guru level comment
+    # results[i][3]: full name
+    # results[i][4]: role
+    print("Results context: {0}".format(results_context))
     context = {
-        'results': results,
+        'results': results_context,
     }
     return render(request, 'conferenceLoader/results.html', context)
 
