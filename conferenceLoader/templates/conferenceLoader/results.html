@@ -15,8 +15,14 @@
             <h1 class="display-4">Results</h1>
         </div>
     </div>
+    <div class="row">
+        <blockquote class="blockquote text-center col">
+            <h2><span class="badge badge-primary">Detected Gurus for query:</span></h2>
+            <h3><span class="badge badge-light font-italic">{{question}}</span></h3>
+        </blockquote>
+    </div>
     {% for result in results %}
-        <div class="card">
+        <div class="card mt-2">
             <div class="row">
                 <h5 class="col-md-4 card-header">{{ result.5 }}</h5>
                 <div class="col-md-2 card-header">
@@ -31,13 +37,36 @@
             <div class="row">
                 <div class="col-md-4">
                     <img class="img-thumbnail" src="/static/conferenceLoader/images/people/{{ result.0 }}_sm.jpg"
-                        onerror="if (this.src != 'error.jpg') this.src = '/static/conferenceLoader/images/people/gchoumo_sm.jpg';"
+                    onerror="if (this.src != 'error.jpg') this.src = '/static/conferenceLoader/images/people/no_photo.jpg';"
                         alt="{{result.0}}">
                 </div>
                 <div class="col-md-8 card-body">
-                    <h5 class="card-title">{{ result.6 }}</h5>
-                    <p class="card-text">{{result.1}} - {{result.2}}</p>
-                    <a href="#" class="btn btn-primary">Slack message</a>
+                    <table class="table">
+                        <tbody>
+                          <tr>
+                            <th scope="row">Role</th>
+                            <td>{{result.6}}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Guru Level Prediction</th>
+                            <td><span class="font-weight-bold text-{{result.4}}">{{result.3}}</span></td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Team</th>
+                            <td>{{result.7}}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Stream</th>
+                            <td>{{result.8}}</td>
+                          </tr>
+                          <tr>
+                            <th scope="row">Location</th>
+                            <td>{{result.9}}</td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <!-- <p class="card-text">{{result.1}} - {{result.2}}</p> -->
+                    <a href="#" class="btn btn-primary" target="https://openbet.slack.com/app_redirect?channel=U2JJL9N9E">Slack message</a>
                 </div>
             </div>
         </div>

@@ -54,12 +54,13 @@ def results(request, project):
     question_form = QuestionForm(request.POST or None)
     if question_form.is_valid():
         question_form.save()
-    results = detect_guru(request.POST.get("question"))
+    question = request.POST.get("question")
+    results = detect_guru(question)
     results_context = []
     for i in results:
         person = Person.objects.get(username=i[0])
         results_context.append(
-            i + [person.name,person.role]
+            i + [person.name,person.role,person.team,person.stream,person.location]
         )
     # results[i][0]: username
     # results[i][1]: guru percentage
@@ -68,9 +69,13 @@ def results(request, project):
     # results[i][4]: guru badge class (bootstrap)
     # results[i][5]: full name
     # results[i][6]: role
+    # results[i][7]: team
+    # results[i][8]: stream
+    # results[i][9]: location
     print("Results context: {0}".format(results_context))
     context = {
         'results': results_context,
+        'question': question,
     }
     return render(request, 'conferenceLoader/results.html', context)
 
@@ -92,31 +97,31 @@ def detect_guru(text, n=-1):
     for i in range(len(ordered)):
         if ordered[i][1]*100 >= 35:
             ordered[i][2] = "*******"
-            ordered[i][3] = "Absolute Guru"
+            ordered[i][3] = "Guru"
             ordered[i][4] = "dark"
         elif ordered[i][1]*100 >= 25:
             ordered[i][2] = "******"
-            ordered[i][3] = "Guru"
+            ordered[i][3] = "Master"
             ordered[i][4] = "danger"
         elif ordered[i][1]*100 >= 20:
             ordered[i][2] = "*****"
-            ordered[i][3] = "Master"
+            ordered[i][3] = "Expert"
             ordered[i][4] = "warning"
         elif ordered[i][1]*100 >= 15:
             ordered[i][2] = "****"
-            ordered[i][3] = "Expert"
+            ordered[i][3] = "Proficient"
             ordered[i][4] = "primary"
         elif ordered[i][1]*100 >= 10:
             ordered[i][2] = "***"
-            ordered[i][3] = "Intermediate"
+            ordered[i][3] = "Competent"
             ordered[i][4] = "info"
         elif ordered[i][1]*100 >= 4:
             ordered[i][2] = "**"
-            ordered[i][3] = "Novice"
+            ordered[i][3] = "Advanced Beginner"
             ordered[i][4] = "secondary"
         elif ordered[i][1]*100 >= 2:
             ordered[i][2] = "*"
-            ordered[i][3] = "Intern"
+            ordered[i][3] = "Novice"
             ordered[i][4] = "success"
         else:
             ordered[i][2] = "Low probability compared to the rest"

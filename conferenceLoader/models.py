@@ -45,6 +45,7 @@ class Person(models.Model):
     role = models.CharField(max_length=100)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
+    location = models.CharField(max_length=20, default='Unknown')
 
     # The string representation of this object, should be its name
     def __str__(self):
