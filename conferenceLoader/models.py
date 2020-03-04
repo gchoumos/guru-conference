@@ -46,6 +46,7 @@ class Person(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     stream = models.ForeignKey(Stream, on_delete=models.CASCADE)
     location = models.CharField(max_length=20, default='Unknown')
+    slack_id = models.CharField(max_length=12, default='')
 
     # The string representation of this object, should be its name
     def __str__(self):

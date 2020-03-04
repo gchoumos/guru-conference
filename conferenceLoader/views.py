@@ -60,7 +60,14 @@ def results(request, project):
     for i in results:
         person = Person.objects.get(username=i[0])
         results_context.append(
-            i + [person.name,person.role,person.team,person.stream,person.location]
+            i + [
+                    person.name,
+                    person.role,
+                    person.team,
+                    person.stream,
+                    person.location,
+                    person.slack_id,
+                ]
         )
     # results[i][0]: username
     # results[i][1]: guru percentage
@@ -72,6 +79,7 @@ def results(request, project):
     # results[i][7]: team
     # results[i][8]: stream
     # results[i][9]: location
+    # results[i][10]: slack ID
     print("Results context: {0}".format(results_context))
     context = {
         'results': results_context,
