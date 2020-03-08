@@ -11,3 +11,11 @@ body {
 #results-page .card {
     color: black;
 }
+
+#new-search-button {
+    bottom: 5px;
+}
+
+.btn a {
+    color: white;
+}
