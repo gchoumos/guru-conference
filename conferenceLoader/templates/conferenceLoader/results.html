@@ -3,6 +3,8 @@
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'conferenceLoader/results.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
 <div id="results-page" class="container">
     <div class="row">
@@ -68,20 +70,22 @@
                           </tr>
                         </tbody>
                     </table>
-                    <!-- <p class="card-text">{{result.1}} - {{result.2}}</p> -->
                     <a href="https://openbet.slack.com/app_redirect?channel={{result.10}}" target="_blank" class="btn btn-primary">Slack message</a>
                 </div>
             </div>
         </div>
     {% endfor %}
-    <div class="row position-fixed fixed-bottom">
-        <div id="new-search-button" class="col">
-            <div class="btn btn-danger font-weight-bold"><a href="/conference/detectGuru/WIL">New Guru Search</a></div>
+    <div class="row position-fixed fixed-bottom  justify-content-start">
+        <div id="feedback-btn" class="col-4">
+            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">Want to share Feedback?</button>
         </div>
-        <div id="btn-top" class="col" style="display: none;">
+        <div id="new-search-button" class="col-4">
+            <div class="btn btn-danger"><a href="/conference/detectGuru/WIL">New Guru Search</a></div>
+        </div>
+        <div id="btn-top" class="col-4" style="display: none;">
             <div class="btn btn-danger">
                 <span class="fa fa-arrow-up">
-                    <a href="#results-page"/>
+                    <a href="#results-page"></a>
                 </span>
             </div>
         </div>
@@ -106,3 +110,5 @@
         });
     });
 </script>
+
+{% include 'conferenceLoader/feedback_modal.html' %}
