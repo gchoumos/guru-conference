@@ -3,15 +3,40 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django import forms
+from gensim.parsing.preprocessing import STOPWORDS
 from .models import Team, Person, QuestionForm, FeedbackForm
 from .trained_models.load_models import load_model
 
 import pickle
 import os
+import re
+import string
 import numpy as np
 
 # Load the William Hill latest trained model (the argument should be passed through the relevant config. Not harcoded.)
 model = load_model('WIL')
+
+# Stop words - This should be read from the settings that the preprocessor also uses. This is Technical Debt!
+# These are in addition to the stopwords.
+# h1-h6: Jira comment notation for headers
+# p1-p5: The Jira priorities
+WORDS_TO_IGNORE = {
+  '2char': [
+    'll',
+    'hi',
+    'cc',
+    'wh',
+    'im',
+    'p1', 'p2', 'p3', 'p4', 'p5',
+    '1g', '2g', '3g', '4g', '5g', '6g', '7g', '8g',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'kb',
+  ]
+}
+stopwords = set(STOPWORDS)
+for x in WORDS_TO_IGNORE['2char']:
+    stopwords.add(x)
+
 
 # This is if the detectGuru part of the url is removed. Consider redirecting to a meaningful page.
 def index(request):
@@ -61,6 +86,8 @@ def results(request, project):
     if question_form.is_valid():
         question_form.save()
     question = request.POST.get("question")
+    # preprocess user query
+    question = preprocess(question)
     results = detect_guru(question)
     results_context = []
     for i in results:
@@ -146,3 +173,46 @@ def detect_guru(text, n=-1):
         else:
             break
     return results
+
+
+def preprocess(question):
+    # **NOT** cleaning newlines and carriage returns
+    # --
+    # Remove URLs - possibly unneeded
+    print("Initial question: {0}".format(question))
+    question = re.sub(r'((https?:\/\/)|(www\.))[^\s]*','',question)
+    print("Removed URLs: {0}".format(question))
+    # Remove e-mails - possibly unneeded
+    question = re.sub(r'[\w\.-]+@[\w\.-]+\.\w+','',question)
+    print("Removed e-mails: {0}".format(question))
+    # Remove multiple spaces
+    question = re.sub(r'\s+',' ',question)
+    print("Removed multiple spaces: {0}".format(question))
+    # **NOT** fixing bad tag cases
+    # --
+    # Removing special tags - possibly unneeded
+    question = re.sub('r(\{[Cc]olor.*?\}(.*?)\{[Cc]olor\})','',question)
+    print("Removed special tags: {0}".format(question))
+    # **NOT** extracting code/quotes/noformats/panels
+    # --
+    # Removing punctuation apart from dashes (-) and underscores(_)
+    punct = '|'.join([re.escape(x) for x in string.punctuation.replace('-','').replace('_','')])
+    question = re.sub(punct,' ',question)
+    print("Removed punctuation: {0}".format(question))
+    # Remove multiple spaces again
+    question = re.sub(r'\s+',' ',question)
+    print("Removed multiple spaces again: {0}".format(question))
+    # Remove digit-only words (the following 2 lines can become one)
+    question = ' '.join([word for word in question.split() if not word.isdigit()])
+    print("Removed digit-only words: {0}".format(question))
+    # Remove small words - (minimum length is 2)
+    minlen = 2
+    question = ' '.join([word for word in question.split() if len(word) >= minlen])
+    print("Removed small words: {0}".format(question))
+    # Convert to lowercase
+    question = question.lower()
+    print("Convert to lowercase: {0}".format(question))
+    # Now stopwords...
+    question = ' '.join([word for word in question.split() if word not in stopwords])
+    print("Removing stopwords: {0}".format(question))
+    return question
