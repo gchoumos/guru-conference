@@ -102,6 +102,10 @@ class Question(models.Model):
     question = models.CharField(max_length=500, default='')
     datetime = models.DateTimeField('Date asked', default=now)
 
+    # The string representation of this object, should be the question itself
+    def __str__(self):
+        return self.question
+
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
