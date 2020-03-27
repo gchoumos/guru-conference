@@ -214,5 +214,7 @@ def preprocess(question):
     print("Convert to lowercase: {0}".format(question))
     # Now stopwords...
     question = ' '.join([word for word in question.split() if word not in stopwords])
+    # Remove punctuation-only words
+    question = ' '.join([word for word in question.split() if not all(c in string.punctuation for c in word)])
     print("Removing stopwords: {0}".format(question))
     return question
