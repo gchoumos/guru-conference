@@ -138,23 +138,23 @@ def detect_guru(text, n=-1):
     ordered.sort(key=lambda x: x[1],reverse=True)
     results = []
     for i in range(len(ordered)):
-        if ordered[i][1]*100 >= 35:
+        if ordered[i][1]*100 >= 30:
             ordered[i][2] = "*******"
             ordered[i][3] = "Guru"
             ordered[i][4] = "dark"
-        elif ordered[i][1]*100 >= 25:
+        elif ordered[i][1]*100 >= 24:
             ordered[i][2] = "******"
             ordered[i][3] = "Master"
             ordered[i][4] = "danger"
-        elif ordered[i][1]*100 >= 20:
+        elif ordered[i][1]*100 >= 19:
             ordered[i][2] = "*****"
             ordered[i][3] = "Expert"
             ordered[i][4] = "warning"
-        elif ordered[i][1]*100 >= 15:
+        elif ordered[i][1]*100 >= 14:
             ordered[i][2] = "****"
             ordered[i][3] = "Proficient"
             ordered[i][4] = "primary"
-        elif ordered[i][1]*100 >= 10:
+        elif ordered[i][1]*100 >= 7:
             ordered[i][2] = "***"
             ordered[i][3] = "Competent"
             ordered[i][4] = "info"
@@ -195,10 +195,12 @@ def preprocess(question):
     print("Removed special tags: {0}".format(question))
     # **NOT** extracting code/quotes/noformats/panels
     # --
-    # Removing punctuation apart from dashes (-) and underscores(_)
+    # Removing punctuation apart from dashes (-) and underscores(_) (replace with space)
     punct = '|'.join([re.escape(x) for x in string.punctuation.replace('-','').replace('_','')])
     question = re.sub(punct,' ',question)
     print("Removed punctuation: {0}".format(question))
+    # Remove dashes and underscores (replace with nothing)
+    question = re.sub(r'-|_','',question)
     # Remove multiple spaces again
     question = re.sub(r'\s+',' ',question)
     print("Removed multiple spaces again: {0}".format(question))
