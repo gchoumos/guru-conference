@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm, HiddenInput, RadioSelect, Textarea, CharField
+from django.forms import ModelForm, HiddenInput, RadioSelect, Textarea, CharField, TextInput
 from django.utils.timezone import now
 
 # Team
@@ -111,7 +111,8 @@ class QuestionForm(ModelForm):
         model = Question
         fields = ['question', 'datetime']
         labels = {'question': ''}
-        widgets = {'datetime': HiddenInput(),}
+        widgets = {'datetime': HiddenInput(),
+                   'question': TextInput(attrs={'size':40})}
 
 
 
