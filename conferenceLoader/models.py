@@ -109,10 +109,9 @@ class Question(models.Model):
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
-        fields = ['question', 'datetime']
+        fields = ['question']
         labels = {'question': ''}
-        widgets = {'datetime': HiddenInput(),
-                   'question': TextInput(attrs={'size':40})}
+        widgets = {'question': TextInput(attrs={'size':40})}
 
 
 

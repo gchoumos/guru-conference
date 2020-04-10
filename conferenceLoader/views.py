@@ -77,7 +77,8 @@ def detect_guru_no_spec(request):
 
 # The results page
 def results(request, project):
-    question_form = QuestionForm(request.POST or None)
+    question_form = QuestionForm(request.GET or None)
+    question_form.datetime = timezone.localtime()
     feedback_form = FeedbackForm(request.POST or None)
     feedback_form.datetime = timezone.localtime()
     if feedback_form.is_valid():
@@ -85,7 +86,7 @@ def results(request, project):
         return HttpResponseRedirect(request.path_info)
     if question_form.is_valid():
         question_form.save()
-    question = request.POST.get("question")
+    question = request.GET.get("question")
     # preprocess user query
     question = preprocess(question)
     results = detect_guru(question)
