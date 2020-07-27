@@ -48,9 +48,6 @@ def detect_team_guru(request, project):
     question_form = QuestionForm()
     feedback_form = FeedbackForm(request.POST or None)
     feedback_form.datetime = timezone.localtime()
-    if feedback_form.is_valid():
-        feedback_form.save()
-        return HttpResponseRedirect(request.path_info)
     context = {
         'team_name': team.name,
         'team_tag': team.project_code.lower(),
@@ -58,6 +55,9 @@ def detect_team_guru(request, project):
         'feedback_form': feedback_form,
         'project': project,
     }
+    if feedback_form.is_valid():
+        feedback_form.save()
+        return render(request, 'conferenceLoader/question.html', context)
     return render(request, 'conferenceLoader/question.html', context)
 
 def team_people(request, project):
