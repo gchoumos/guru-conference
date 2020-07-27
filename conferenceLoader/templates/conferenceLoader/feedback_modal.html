@@ -7,7 +7,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form method="post" action="/guruConference/detectGuru/{{project}}/">
+        <form method="post" action="/guruDetector/">
           <div class="modal-body feedback">
             {%csrf_token%}
               {% for field in feedback_form %}
